@@ -28,10 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pb_Circle->setEnabled(false);
 
     connect(watch, &Stopwatch::sig_UpdateTime, this, &MainWindow::lapTime);
-    connect(this, &MainWindow::sig_Start, watch, &Stopwatch::StartTimer);
-    connect(this, &MainWindow::sig_Stop, watch, &Stopwatch::StopTimer);
-    connect(this, &MainWindow::sig_Clear, watch, &Stopwatch::ReceiveClear);
-    connect(this, &MainWindow::sig_Circle, watch, &Stopwatch::ReceiveCircle);
+
 
 
 
@@ -52,13 +49,13 @@ void MainWindow::on_pb_Start_Stop_clicked()
         ui->pb_Start_Stop->setText("Пауза");
         ui->pb_Start_Stop->setStyleSheet("background-color:red");
         ui->pb_Circle->setEnabled(true);
-        emit sig_Start();
+        watch->StartTimer();
         checked = false;
     } else {
         ui->pb_Start_Stop->setText("Старт");
         ui->pb_Start_Stop->setStyleSheet("background-color:green");
         ui->pb_Circle->setEnabled(false);
-        emit sig_Stop();
+        watch->StopTimer();
         checked = true;
     }
 }
@@ -66,7 +63,7 @@ void MainWindow::on_pb_Start_Stop_clicked()
 
 void MainWindow::on_pb_Circle_clicked()
 {
-    emit sig_Circle();
+    watch->ReceiveCircle();
     QString text = watch->GetCircleTime();
     ui->tb_TimeTable->append(text);
 }
@@ -76,6 +73,6 @@ void MainWindow::on_pb_Clear_clicked()
 {
     ui->tb_TimeTable->clear();
     ui->la_Time->setText("0:00.0");
-    emit sig_Clear();
+    watch->ReceiveClear();
 }
 

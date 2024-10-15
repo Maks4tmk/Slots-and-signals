@@ -28,22 +28,17 @@ void Stopwatch::StopTimer() {
 }
 
 void Stopwatch::ReceiveCircle() {
-    int minutes = 0;
-    if (stop_time.secsTo(time) / 60) {
-        minutes = stop_time.secsTo(time) / 60;
-    }
-    stop_time = stop_time.addSecs(60 * minutes);
+    int msec = stop_time.msecsTo(time);
+    stop_time.setHMS(0, 0, 0, 0);
+    stop_time = stop_time.addMSecs(msec);
 
     circle_time =   "Круг №"
                   + QString::number(circle_count++)
                   + " - "
-                  + QString::number(minutes)
-                  + ":"
-                  + QString::number(stop_time.secsTo(time))
-                  + "."
-                  + QString::number(stop_time.msecsTo(time));
+                  + stop_time.toString("mm:ss.z");
     stop_time = time;
 }
+
 
 void Stopwatch::ReceiveClear() {
     circle_count = 1;
